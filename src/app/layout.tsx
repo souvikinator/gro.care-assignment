@@ -24,8 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <QueryClientProvider client={queryClient}>
-          <div className="min-h-screen flex flex-col mx-20">
-            <Navbar />
+          <div className="max-h-screen flex flex-col bg-black py-2">
             {children}
           </div>
         </QueryClientProvider>

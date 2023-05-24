@@ -35,12 +35,12 @@ export default function Home() {
   }, [inView]);
 
   return (
-    <main className="">
-      <div className="flex flex-wrap -mx-1 lg:-mx-4 mb-2 overflow-hidden">
+    <main className="mx-2 rounded-t-xl flex flex-wrap mb-2 overflow-y-scroll snap snap-y snap-mandatory">
+      <div className="">
         {status === "loading" ? (
           <div className="w-full flex flex-col items-center justify-center mt-10">
             <FadeLoader color="#24282F" aria-setsize={25} />
-            <p className="text-xl font-medium text-gray-800">
+            <p className="text-xl font-medium text-gray-800 flex justify-center">
               Loading the gateway to a world of videos and inspiration!
             </p>
           </div>
