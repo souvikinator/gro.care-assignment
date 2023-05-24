@@ -3,13 +3,17 @@ import VideoCard from "@/components/VideoCard";
 import { fetchVideos } from "../utils";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FadeLoader } from "react-spinners";
 import { useInView } from "react-intersection-observer";
 import { T_ResponseData } from "@/types";
+import SpalshScreen from "@/components/SpalshScreen";
+import VideoPlayer from "@/components/VideoPlayer";
 
 export default function Home() {
-  const { ref, inView } = useInView();
+  const infiniteScrollObserver = useInView({
+    threshold: 1,
+  });
 
   const {
     status,
@@ -29,21 +33,16 @@ export default function Home() {
   );
 
   useEffect(() => {
-    if (inView) {
+    if (infiniteScrollObserver.inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [infiniteScrollObserver.inView]);
 
   return (
     <main className="mx-2 rounded-t-xl flex flex-wrap mb-2 overflow-y-scroll snap snap-y snap-mandatory">
-      <div className="">
+      <div className="h-full">
         {status === "loading" ? (
-          <div className="w-full flex flex-col items-center justify-center mt-10">
-            <FadeLoader color="#24282F" aria-setsize={25} />
-            <p className="text-xl font-medium text-gray-800 flex justify-center">
-              Loading the gateway to a world of videos and inspiration!
-            </p>
-          </div>
+          <SpalshScreen />
         ) : status === "error" ? (
           <p className="p-5 bg-red-300 rounded-lg text-red-950">
             {/* @ts-ignore */}
@@ -54,30 +53,13 @@ export default function Home() {
             {data.pages.map((page) => (
               <>
                 {page.posts.map((post, i) => (
-                  <VideoCard
-                    comment={{
-                      count: post.comment.count,
-                      enabled: post.comment.commentingAllowed,
-                    }}
-                    reactions={{
-                      count: post.reaction.count,
-                      voted: post.reaction.voted,
-                    }}
-                    creator={{
-                      handle: post.creator.handle,
-                      profileImageUrl: post.creator.pic,
-                    }}
-                    thumbnailUrl={post.submission.thumbnail}
-                    title={post.submission.title}
-                    videoId={post.postId}
-                    key={i}
-                  />
+                  <VideoPlayer src={post.submission.mediaUrl} />
                 ))}
               </>
             ))}
             <div className="w-full flex items-center justify-center">
               <button
-                ref={ref}
+                ref={infiniteScrollObserver.ref}
                 onClick={() => fetchNextPage()}
                 disabled={!hasNextPage || isFetchingNextPage}
                 className="p-3 rounded-md bg-gray-900 text-white font-medium"
