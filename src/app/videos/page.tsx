@@ -1,13 +1,14 @@
 "use client";
-import { fetchVideos } from "../../utils";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import VideoCard from "@/components/VideoCard";
+import { fetchVideos, getVideos } from "../../utils";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { FadeLoader } from "react-spinners";
 import { useInView } from "react-intersection-observer";
 import { T_ResponseData } from "@/types";
-import VideoCard from "@/components/VideoCard";
+import Navbar from "@/components/Navbar";
 
-export default function Videos() {
+export default function Home() {
   const { ref, inView } = useInView();
 
   const {
@@ -17,15 +18,7 @@ export default function Videos() {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery<T_ResponseData>(
-    ["videos"],
-    async ({ pageParam = 0 }) => {
-      return await fetchVideos(pageParam);
-    },
-    {
-      getNextPageParam: (lastPage) => lastPage.offset ?? undefined,
-    }
-  );
+  } = getVideos();
 
   useEffect(() => {
     if (inView) {
@@ -34,8 +27,9 @@ export default function Videos() {
   }, [inView]);
 
   return (
-    <main className="">
-      <div className="flex flex-wrap -mx-1 lg:-mx-4 mb-2 overflow-hidden">
+    <main className="flex flex-col">
+      <Navbar />
+      <div className="mx-10">
         {status === "loading" ? (
           <div className="w-full flex flex-col items-center justify-center mt-10">
             <FadeLoader color="#24282F" aria-setsize={25} />
@@ -49,7 +43,7 @@ export default function Videos() {
             Some error occured while fetching video {error.message}
           </p>
         ) : (
-          <>
+          <div className="flex flex-wrap lg:-mx-4 mb-2 overflow-hidden ">
             {data.pages.map((page) => (
               <>
                 {page.posts.map((post, i) => (
@@ -88,7 +82,7 @@ export default function Videos() {
                   : "Nothing more to load"}
               </button>
             </div>
-          </>
+          </div>
         )}
       </div>
     </main>

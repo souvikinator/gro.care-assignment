@@ -18,7 +18,7 @@ type T_props = {
 
 function VideoSidebar(props: T_props) {
   return (
-    <div className="absolute -inset-y-1/2 right-0 flex flex-col text-white space-y-2 px-4 ">
+    <div className="absolute -inset-y-1/2 right-0 flex flex-col text-white space-y-2 px-4">
       <div className="flex flex-col items-center">
         {props.reactions.voted ? (
           <BsFillHeartFill size={40} />

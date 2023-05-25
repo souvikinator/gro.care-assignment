@@ -76,8 +76,7 @@ function RollVideoCard(props: T_RollVideoCardProps) {
             videoRef.current.play();
           }
         }}
-        className={`bg-gradient-to-t  from-black opacity-80 rounded-xl h-full
-        `}
+        className={`bg-gradient-to-t  from-black rounded-xl h-full`}
         loop
       ></video>
       <VideoSidebar

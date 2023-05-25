@@ -10,7 +10,7 @@ type T_props = {
 function VideoFooter(props: T_props) {
   const [expanded, setExpanded] = useState(false);
   return (
-    <div className="absolute inset-x-0 bottom-0  flex flex-row w-full p-4">
+    <div className="absolute inset-x-0 bottom-0  flex flex-row w-full p-4 bg-gradient-to-t  from-black">
       <div className="w-1/12 py-2">
         <img
           alt="Placeholder"
@@ -18,7 +18,7 @@ function VideoFooter(props: T_props) {
           src={props.profileImage}
         />
       </div>
-      <div className="ml-3 w-10/12 text-white">
+      <div className="ml-3 w-10/12 text-white ">
         <p className="text-xl font-semibold">{props.title}</p>
         <p className="text-md ">{props.creator}</p>
         <div className={``} onClick={() => setExpanded((prev) => !prev)}>

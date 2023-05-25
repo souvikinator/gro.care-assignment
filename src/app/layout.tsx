@@ -23,12 +23,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className}`}>
         <Toaster />
         <QueryClientProvider client={queryClient}>
-          <div className="max-h-screen flex flex-col bg-black min-h-screen">
-            {children}
-          </div>
+          <div className="max-h-screen flex flex-col ">{children}</div>
         </QueryClientProvider>
       </body>
     </html>
