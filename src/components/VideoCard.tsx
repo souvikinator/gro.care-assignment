@@ -1,15 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React from "react";
+import { BsFillHeartFill, BsHeart } from "react-icons/bs";
+import { BiCommentDots } from "react-icons/bi";
 import Link from "next/link";
-import ReactPlayer from "react-player";
-import { useInView } from "react-intersection-observer";
-import VideoFooter from "./VideoFooter";
-import VideoSidebar from "./VideoSidebar";
 
 type T_VideoCardProps = {
   videoId: string;
   thumbnailUrl: string;
   title: string;
-  videoUrl: string;
   comment: {
     count: number;
     enabled: boolean;
@@ -22,77 +19,46 @@ type T_VideoCardProps = {
     handle: string;
     profileImageUrl: string;
   };
-  description: string;
 };
 
 function VideoCard(props: T_VideoCardProps) {
-  const [inViewRef, inView] = useInView({
-    threshold: 1,
-  });
-  const [playing, setIsPlaying] = useState(false);
-
-  const videoRef = useRef(null);
-
-  useEffect(() => {
-    let options = {
-      threshold: 0.7,
-    };
-
-    let handlePlay = (entries, observer) => {
-      entries.forEach((entry) => {
-        console.log(entry);
-        if (entry.isIntersecting) {
-          videoRef.current.play();
-        } else {
-          videoRef.current.pause();
-        }
-      });
-    };
-
-    let observer = new IntersectionObserver(handlePlay, options);
-
-    observer.observe(videoRef.current);
-  });
-
   return (
-    <div className=" w-full h-screen snap-end rounded-lg shadow-lg relative">
-      {/* <img
-          alt="Placeholder"
-          className="block h-auto w-full"
-          src={props.thumbnailUrl}
-        /> */}
-      <video
-        src={props.videoUrl}
-        ref={videoRef}
-        onClick={(e) => {
-          // @ts-ignore
-          const isPlaying = !!(
-            videoRef.current?.currentTime > 0 &&
-            !videoRef.current?.paused &&
-            !videoRef.current?.ended &&
-            videoRef.current?.readyState > 2
-          );
-          if (isPlaying) {
-            setIsPlaying(false);
-            videoRef.current.pause();
-            console.log("pause...");
-          } else {
-            setIsPlaying(true);
-            videoRef.current.play();
-            console.log("play...");
-          }
-        }}
-        className={`bg-gradient-to-t  from-black opacity-70
-        `}
-        loop
-      ></video>
-      <VideoSidebar comment={props.comment} reactions={props.reactions} />
-      <VideoFooter
-        creator={props.creator.handle}
-        description={props.description}
-        profileImage={props.creator.profileImageUrl}
-        title={props.title}
-      />
+    <div className="my-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/4">
+      <Link href={`/watch/${props.videoId}`}>
+        <article className="overflow-hidden rounded-lg shadow-lg relative">
+          {/* TODO: thumbnail */}
+          <img
+            alt="Placeholder"
+            className="block h-auto w-full"
+            src={props.thumbnailUrl}
+          />
+          <div className="absolute bottom-0 left-0 right-0 flex w-full p-2 md:p-4 bg-gradient-to-t  from-black">
+            <div className="">
+              <img
+                alt="Placeholder"
+                className="block rounded-full w-10"
+                src={props.creator.profileImageUrl}
+              />
+            </div>
+            <div className="ml-2 w-full text-white">
+              <p className="ml-2 text-xl font-semibold">{props.title}</p>
+              <p className="ml-2 text-md ">{props.creator.handle}</p>
+              <div className="ml-2 flex items-center space-x-4">
+                <span className="flex items-center text-md space-x-2">
+                  {props.reactions.voted ? <BsFillHeartFill /> : <BsHeart />}
+                  <p className="">{props.reactions.count}</p>
+                </span>
+                {props.comment.enabled && (
+                  <span className="flex items-center text-md space-x-2">
+                    <BiCommentDots />
+                    <p className="">{props.comment.count}</p>
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </article>
+      </Link>
     </div>
   );
 }

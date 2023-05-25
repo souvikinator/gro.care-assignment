@@ -10,6 +10,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,8 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Toaster />
         <QueryClientProvider client={queryClient}>
-          <div className="max-h-screen flex flex-col bg-black py-2">
+          <div className="max-h-screen flex flex-col bg-black min-h-screen">
             {children}
           </div>
         </QueryClientProvider>

@@ -1,14 +1,12 @@
-"use client";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
 import React from "react";
-import ReactPlayer from "react-player";
-import { FadeLoader } from "react-spinners";
 
-// @ts-ignore
-function Page({ params, searchParams }) {
+type T_params = {
+  video_id: string;
+};
+
+function page({ params }: { params: T_params }) {
   const { video_id } = params;
-  return <div>watch video</div>;
+  return <div>watch ${video_id}</div>;
 }
 
-export default Page;
+export default page;
