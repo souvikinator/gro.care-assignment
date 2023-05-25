@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { BsFillHeartFill, BsHeart } from "react-icons/bs";
-import { BiCommentDots } from "react-icons/bi";
 import Link from "next/link";
 import ReactPlayer from "react-player";
 import { useInView } from "react-intersection-observer";
 import VideoFooter from "./VideoFooter";
+import VideoSidebar from "./VideoSidebar";
 
 type T_VideoCardProps = {
   videoId: string;
@@ -32,25 +31,28 @@ function VideoCard(props: T_VideoCardProps) {
   });
   const [playing, setIsPlaying] = useState(false);
 
-  const videoRef = useRef();
+  const videoRef = useRef(null);
 
   useEffect(() => {
-    if (inView) {
-      // @ts-ignore
-      videoRef.current.play();
-    } else {
-      // @ts-ignore
-      videoRef.current.pause();
-    }
-  }, [inView]);
+    let options = {
+      threshold: 0.7,
+    };
 
-  const setRefs = useCallback(
-    (node: any) => {
-      videoRef.current = node;
-      inViewRef(node);
-    },
-    [inViewRef]
-  );
+    let handlePlay = (entries, observer) => {
+      entries.forEach((entry) => {
+        console.log(entry);
+        if (entry.isIntersecting) {
+          videoRef.current.play();
+        } else {
+          videoRef.current.pause();
+        }
+      });
+    };
+
+    let observer = new IntersectionObserver(handlePlay, options);
+
+    observer.observe(videoRef.current);
+  });
 
   return (
     <div className=" w-full h-screen snap-end rounded-lg shadow-lg relative">
@@ -59,7 +61,32 @@ function VideoCard(props: T_VideoCardProps) {
           className="block h-auto w-full"
           src={props.thumbnailUrl}
         /> */}
-      <video src={props.videoUrl} ref={setRefs} loop autoPlay></video>
+      <video
+        src={props.videoUrl}
+        ref={videoRef}
+        onClick={(e) => {
+          // @ts-ignore
+          const isPlaying = !!(
+            videoRef.current?.currentTime > 0 &&
+            !videoRef.current?.paused &&
+            !videoRef.current?.ended &&
+            videoRef.current?.readyState > 2
+          );
+          if (isPlaying) {
+            setIsPlaying(false);
+            videoRef.current.pause();
+            console.log("pause...");
+          } else {
+            setIsPlaying(true);
+            videoRef.current.play();
+            console.log("play...");
+          }
+        }}
+        className={`bg-gradient-to-t  from-black opacity-70
+        `}
+        loop
+      ></video>
+      <VideoSidebar comment={props.comment} reactions={props.reactions} />
       <VideoFooter
         creator={props.creator.handle}
         description={props.description}

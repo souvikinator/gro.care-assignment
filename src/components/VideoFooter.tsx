@@ -10,7 +10,7 @@ type T_props = {
 function VideoFooter(props: T_props) {
   const [expanded, setExpanded] = useState(false);
   return (
-    <div className="absolute bottom-0 left-0 right-0 flex flex-row w-full p-4 bg-gradient-to-t  from-black">
+    <div className="absolute inset-x-0 bottom-0  flex flex-row w-full p-4">
       <div className="w-1/12 py-2">
         <img
           alt="Placeholder"
