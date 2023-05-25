@@ -27,27 +27,29 @@ type T_RollVideoCardProps = {
 function RollVideoCard(props: T_RollVideoCardProps) {
   const [playing, setIsPlaying] = useState(false);
 
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     let options = {
       threshold: 0.7,
     };
 
+    // @ts-ignore
     let handlePlay = (entries, observer) => {
+      // @ts-ignore
       entries.forEach((entry) => {
         console.log(entry);
         if (entry.isIntersecting) {
-          videoRef.current.play();
+          videoRef.current?.play();
         } else {
-          videoRef.current.pause();
+          videoRef.current?.pause();
         }
       });
     };
 
     let observer = new IntersectionObserver(handlePlay, options);
 
-    observer.observe(videoRef.current);
+    if (videoRef.current) observer.observe(videoRef.current);
   });
 
   return (
@@ -62,6 +64,7 @@ function RollVideoCard(props: T_RollVideoCardProps) {
         ref={videoRef}
         onClick={(e) => {
           const isPlaying = !!(
+            videoRef.current?.currentTime &&
             videoRef.current?.currentTime > 0 &&
             !videoRef.current?.paused &&
             !videoRef.current?.ended &&
@@ -69,11 +72,11 @@ function RollVideoCard(props: T_RollVideoCardProps) {
           );
           if (isPlaying) {
             setIsPlaying(false);
-            videoRef.current.pause();
+            videoRef.current?.pause();
             toast("paused", { position: "bottom-center", icon: "⏸️" });
           } else {
             setIsPlaying(true);
-            videoRef.current.play();
+            videoRef.current?.play();
           }
         }}
         className={`bg-gradient-to-t  from-black rounded-xl h-full`}
