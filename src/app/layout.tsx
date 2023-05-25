@@ -15,12 +15,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <QueryClientProvider client={queryClient}>
-        <Toaster />
-        <body className={"min-h-screen bg-black text-white"}>
+      <body className={"min-h-screen bg-black text-white"}>
+        <QueryClientProvider client={queryClient}>
+          <Toaster />
           <div className="max-h-screen flex flex-col ">{children}</div>
-        </body>
-      </QueryClientProvider>
+        </QueryClientProvider>
+      </body>
     </html>
   );
 }
