@@ -1,34 +1,53 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 function VideoPlayer({ src }: { src: string }) {
-  const [inViewRef, inView] = useInView();
+  const [inViewRef, inView] = useInView({
+    threshold: 1,
+  });
+  const [playing, setIsPlaying] = useState(false);
+
   const videoRef = useRef();
 
   useEffect(() => {
+    if (videoRef && videoRef.current) {
+      const video: HTMLVideoElement = videoRef.current;
+      var isPlaying =
+        video.currentTime > 0 &&
+        !video.paused &&
+        !video.ended &&
+        video.readyState > video.HAVE_CURRENT_DATA;
+      setIsPlaying(isPlaying);
+    }
+  }, [videoRef]);
+
+  useEffect(() => {
     if (inView) {
-      console.log(videoRef.current);
-      // @ts-ignore
-      videoRef.current.play();
+      if (!playing) {
+        // @ts-ignore
+        videoRef.current.play();
+        console.log("playing");
+      }
     } else {
-      // @ts-ignore
-      videoRef.current.pause();
+      if (playing) {
+        // @ts-ignore
+        videoRef.current.pause();
+        console.log("pause");
+      }
     }
   }, [inView]);
 
   const setRefs = useCallback(
     (node: any) => {
-      // Ref's from useRef needs to have the node assigned to `current`
       videoRef.current = node;
-      // Callback refs, like the one from `useInView`, is a function that takes the node as an argument
       inViewRef(node);
     },
     [inViewRef]
   );
 
   return (
-    <div className="snap-end">
-      <video src={src} ref={setRefs} controls loop></video>
+    <div className="snap-start">
+      <video src={src} ref={setRefs} controls loop muted></video>
     </div>
   );
 }

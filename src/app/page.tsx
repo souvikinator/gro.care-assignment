@@ -53,7 +53,26 @@ export default function Home() {
             {data.pages.map((page) => (
               <>
                 {page.posts.map((post, i) => (
-                  <VideoPlayer src={post.submission.mediaUrl} />
+                  <VideoCard
+                    description={post.submission.description}
+                    videoUrl={post.submission.mediaUrl}
+                    comment={{
+                      count: post.comment.count,
+                      enabled: post.comment.commentingAllowed,
+                    }}
+                    reactions={{
+                      count: post.reaction.count,
+                      voted: post.reaction.voted,
+                    }}
+                    creator={{
+                      handle: post.creator.handle,
+                      profileImageUrl: post.creator.pic,
+                    }}
+                    thumbnailUrl={post.submission.thumbnail}
+                    title={post.submission.title}
+                    videoId={post.postId}
+                    key={i}
+                  />
                 ))}
               </>
             ))}
