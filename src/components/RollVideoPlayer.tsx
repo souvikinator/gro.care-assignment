@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import VideoFooter from "./VideoFooter";
 import VideoSidebar from "./VideoSidebar";
 import { toast } from "react-hot-toast";
+import VideoHeader from "./VideoHeader";
 
 type T_RollVideoCardProps = {
   videoId: string;
@@ -53,12 +54,8 @@ function RollVideoCard(props: T_RollVideoCardProps) {
   });
 
   return (
-    <div className="max-w-md h-screen snap-end rounded-lg shadow-lg relative">
-      {/* <img
-          alt="Placeholder"
-          className="block h-auto w-full"
-          src={props.thumbnailUrl}
-        /> */}
+    <div className="max-w-lg snap-end rounded-xl shadow-lg relative h-screen">
+      <VideoHeader />
       <video
         src={props.videoUrl}
         ref={videoRef}

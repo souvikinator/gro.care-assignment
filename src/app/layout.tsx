@@ -1,18 +1,9 @@
 "use client";
 
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
-
-const inter = Inter({ subsets: ["latin"] });
 
 const queryClient = new QueryClient();
 
@@ -22,13 +13,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className}`}>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <QueryClientProvider client={queryClient}>
         <Toaster />
-        <QueryClientProvider client={queryClient}>
+        <body className={"min-h-screen bg-black text-white"}>
           <div className="max-h-screen flex flex-col ">{children}</div>
-        </QueryClientProvider>
-      </body>
+        </body>
+      </QueryClientProvider>
     </html>
   );
 }

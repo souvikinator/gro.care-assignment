@@ -3,14 +3,22 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="mx-2 flex flex-wrap overflow-y-scroll snap snap-y snap-mandatory justify-center ">
-      <div>
-        <Link href="/rolls">
-          <p className="text-white hover:underline">Rolls view</p>
-        </Link>
-        <Link href="/videos">
-          <p className="text-white hover:underline">Video gallery view</p>
-        </Link>
+    <main className="mt-10 mx-auto h-full">
+      <div className="flex flex-col justify-center items-center h-full">
+        <p className="text-5xl font-medium">PopFizz</p>
+        <p className="mt-2 text-lg text-gray-500">Video sharing platform</p>
+        <div className="py-10 flex flex-row space-x-2 items-center">
+          <Link href="/rolls">
+            <p className="p-3 rounded bg-violet-400 items-center justify-center flex font-medium">
+              Rolls view
+            </p>
+          </Link>
+          <Link href="/videos">
+            <p className="p-3 rounded bg-violet-400 items-center justify-center flex font-medium">
+              Video gallery
+            </p>
+          </Link>
+        </div>
       </div>
     </main>
   );
